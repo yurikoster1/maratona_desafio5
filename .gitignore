@@ -202,3 +202,5 @@ dist
 .pnp.*
 
 .docker/dbdata/
+
+app/.npm-cache/
