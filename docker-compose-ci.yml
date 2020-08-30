@@ -8,8 +8,8 @@ services:
       dockerfile: .docker/nest/Dockerfile
       target: ci
     container_name: maratona_5_nest
-    image: yurikoster1/maratona_5_nest:dev
-    entrypoint: 'dockerize -wait tcp://db:3306 -timeout 400s -wait http://host.docker.internal:8080 -timeout 400s '
+    image: yurikoster1/maratona_5_nest:ci
+    entrypoint: 'dockerize -wait tcp://db:3306 -timeout 400s -wait http://keycloak:8080 -timeout 400s '
     command: ["npm", "run", "start"]
     depends_on:
       - keycloak
@@ -20,7 +20,6 @@ services:
     build:
       context: .docker/keycloak
       dockerfile: Dockerfile
-
     container_name: maratona_5_keycloak
     environment:
       - 'KEYCLOAK_USER=admin'
@@ -34,6 +33,8 @@ services:
       - 'DB_PASSWORD=root'
     ports:
     - 8080:8080
+    depends_on:
+      - db
 
   db:
     build:

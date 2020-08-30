@@ -27,8 +27,9 @@ USER node
 
 FROM dev as ci
 
-COPY app /home/node/app
-
 USER node
-
+COPY app /home/node/app
+USER root
+RUN npm install
+USER node
 CMD npm run start

@@ -2,9 +2,11 @@ name: CI
 on: ['pull_request']
 jobs:
   build:
-    runs_on: ubuntu_latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: docker-compose -f docker-compose-ci.yml up -d
-      - run: docker-compose exec app dockerize -timeout=300s -wait=http://localhost:3000
-      - run: docker-compose exec app npm run test
+      - run: docker exec maratona_5_nest dockerize -timeout=300s -wait=http://localhost:3000
+      - run: docker exec maratona_5_nest npm run test
+      - run: docker logs maratona_5_nest
+      - run: docker exec maratona_5_nest npm run test
