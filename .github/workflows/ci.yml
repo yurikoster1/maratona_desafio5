@@ -9,5 +9,7 @@ jobs:
       - run: docker logs maratona_5_nest
       - run: docker logs maratona_5_keycloak
       - run: docker logs maratona_5_db
+      - run: docker exec maratona_5_nest npm run test
       - run: docker exec maratona_5_nest dockerize -timeout=300s -wait=http://localhost:3000
+      - run: docker logs maratona_5_nest
       - run: docker exec maratona_5_nest npm run test
