@@ -6,31 +6,25 @@ services:
     build:
       context: .
       dockerfile: .docker/nest/Dockerfile
-      target: dev
+      target: ci
     container_name: maratona_5_nest
     image: yurikoster1/maratona_5_nest:dev
     entrypoint: 'dockerize -wait tcp://db:3306 -timeout 400s -wait http://host.docker.internal:8080 -timeout 400s '
-    command: ["npm", "run", "start:dev"]
-#    command: ["/bin/bash"]
-    volumes:
-      - ./app:/home/node/app
-    ports:
-    - 8082:3000
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"
+    command: ["npm", "run", "start"]
     depends_on:
       - keycloak
       - db
+
+
   keycloak:
     build:
       context: .docker/keycloak
       dockerfile: Dockerfile
 
     container_name: maratona_5_keycloak
-    image: yurikoster1/maratona_5_keycloak
     environment:
       - 'KEYCLOAK_USER=admin'
-      - 'KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD}'
+      - 'KEYCLOAK_PASSWORD=123456'
       - 'DB_VENDOR=mysql'
       - 'DB_ADDR=db'
       - 'DB_PORT=3306'
@@ -46,12 +40,10 @@ services:
       context: ./.docker/mysql
     container_name: maratona_5_db
     image: yurikoster1/maratona_5_db
-    restart: unless-stopped
     tty: true
     ports:
       - "33006:3306"
     volumes:
-      - ./.docker/dbdata:/var/lib/mysql
       - ./.docker/mysql/init:/docker-entrypoint-initdb.d
     environment:
       - MYSQL_ROOT_PASSWORD=root
